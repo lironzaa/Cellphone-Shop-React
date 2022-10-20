@@ -12,7 +12,7 @@ const PhoneItem = props => {
                 <div className={classes.price}>{price}</div>
             </div>
             <div>
-                <PhoneItemForm/>
+                <PhoneItemForm id={props.id}/>
             </div>
         </li>
     );

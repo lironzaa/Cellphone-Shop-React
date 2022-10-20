@@ -32,6 +32,7 @@ const DUMMY_PHONES = [
 const AvailablePhones = () => {
     const phonesList = DUMMY_PHONES.map(phone => (
         <PhoneItem
+            id={phone.id}
             key={phone.id}
             name={phone.name}
             description={phone.description}
