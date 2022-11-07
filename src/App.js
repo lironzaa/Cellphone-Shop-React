@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import Phones from "./components/Phones/Phones";
 import Cart from "./components/Cart/Cart";
 import CartProvider from "./store/CartProvider";
+import { toast, ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
     const [ cartIsShown, setCartIsShown ] = useState(false);
@@ -15,13 +17,18 @@ function App() {
         setCartIsShown(false);
     };
 
+  const notify = () => {
+    toast("Order Completed!")
+  };
+
     return (
         <CartProvider>
-            {cartIsShown && <Cart onClose={hideCartHandler}/>}
+            {cartIsShown && <Cart onAlert={notify} onClose={hideCartHandler}/>}
             <Header onShowCart={showCartHandler}/>
             <main>
                 <Phones/>
             </main>
+          <ToastContainer />
         </CartProvider>
     );
 }
