@@ -1,54 +1,78 @@
 import classes from "./AvailablePhones.Module.css";
 import Card from "../UI/Card";
 import PhoneItem from "./PhoneItem/PhoneItem";
-
-const DUMMY_PHONES = [
-    {
-        id: 'm1',
-        name: 'Iphone 14',
-        description: 'Apple Flagship',
-        price: 699.99,
-    },
-    {
-        id: 'm2',
-        name: 'Galaxy S22',
-        description: 'Best Camera in the world',
-        price: 649,
-    },
-    {
-        id: 'm3',
-        name: 'Xiaomi T11 Pro',
-        description: 'Xiaomi latest technology',
-        price: 559.99,
-    },
-    {
-        id: 'm4',
-        name: 'Google Pixel 6',
-        description: 'Best google phone',
-        price: 600,
-    },
-];
+import { useEffect, useState } from "react";
 
 const AvailablePhones = () => {
-    const phonesList = DUMMY_PHONES.map(phone => (
-        <PhoneItem
-            id={phone.id}
-            key={phone.id}
-            name={phone.name}
-            description={phone.description}
-            price={phone.price}
-        />
-    ));
+  const [ phones, setPhones ] = useState([]);
+  const [ isLoading, setIsLoading ] = useState(true);
+  const [ error, setError ] = useState();
 
+  useEffect(() => {
+    const fetchMeals = async () => {
+      const response = await fetch("https://cellphone-shop-react-default-rtdb.firebaseio.com/phones.json");
+
+      if (!response.ok) {
+        throw new Error('Something went wrong!');
+      }
+
+      const responseData = await response.json();
+      const loadedPhones = [];
+
+      for (const key in responseData) {
+        loadedPhones.push({
+          id: key,
+          name: responseData[key].name,
+          description: responseData[key].description,
+          price: responseData[key].price,
+        });
+      }
+
+      setPhones(loadedPhones);
+      setIsLoading(false);
+    };
+
+    fetchMeals().catch((error) => {
+      setIsLoading(false);
+      setError(error.message);
+    });
+  }, []);
+
+  if (isLoading) {
     return (
-        <section className={classes.phones}>
-            <Card>
-                <ul>
-                    {phonesList}
-                </ul>
-            </Card>
-        </section>
+      <section className={classes.phonesLoading}>
+        <p>Loading...</p>
+      </section>
     )
+  }
+
+  if (error) {
+    return (
+      <section className={classes.phonesError}>
+        <p>failed to fetch</p>
+      </section>
+    )
+  }
+
+  const phonesList = phones.map(phone => (
+    <PhoneItem
+      id={phone.id}
+      key={phone.id}
+      name={phone.name}
+      description={phone.description}
+      price={phone.price}
+    />
+  ));
+
+  return (
+    <section className={classes.phones}>
+      <Card>
+        <ul>
+          {phonesList}
+        </ul>
+      </Card>
+    </section>
+  )
 };
 
 export default AvailablePhones;

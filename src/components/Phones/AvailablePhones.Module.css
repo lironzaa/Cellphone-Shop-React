@@ -5,6 +5,16 @@
     animation: phones-appear 1s ease-out forwards;
 }
 
+.phonesLoading {
+    text-align: center;
+    color: white;
+}
+
+.phonesError {
+    text-align: center;
+    color: red;
+}
+
 .phones ul {
     list-style: none;
     margin: 0;

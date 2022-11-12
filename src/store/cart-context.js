@@ -7,7 +7,7 @@ const CartContext = React.createContext({
     },
     removeItem: (id) => {
     },
-    order: () => {
+    clearCart: () => {
     },
 });
 
